@@ -22,7 +22,13 @@ impl Field {
     }
 
     fn get_cell_index_from_coordinates(&self, coordinates: Coordinates) -> usize {
-        (coordinates.row * self.height + coordinates.column - 11) as usize
+        let x = (coordinates.row * self.height + coordinates.column - 11) as usize;
+		
+		if x >= 100 {
+			println!("kek: {:#?}", coordinates)
+		}
+
+		x
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {
@@ -33,7 +39,7 @@ impl Field {
         }
     }
 
-    pub(crate) fn get_cell_from_coordinates(&mut self, coordinates: Coordinates) -> &mut Cell {
+    pub(crate) fn get_cell_by_coordinates(&mut self, coordinates: Coordinates) -> &mut Cell {
         let i = self.get_cell_index_from_coordinates(coordinates);
         &mut self.cells[i]
     }
@@ -107,7 +113,7 @@ impl Field {
             });
         }
         // Bottom middle
-        if is_with_top {
+        if is_with_bottom {
             result[2][1] = Some(Coordinates {
                 column: coordinates.column,
                 row: coordinates.row + 1,
