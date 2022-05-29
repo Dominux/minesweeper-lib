@@ -51,6 +51,7 @@ impl Cell {
     }
 }
 
+#[derive(Debug)]
 pub struct Coordinates {
     pub row: u16,
     pub column: u16,

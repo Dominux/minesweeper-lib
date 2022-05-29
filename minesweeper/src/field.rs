@@ -22,14 +22,14 @@ impl Field {
     }
 
     fn get_cell_index_from_coordinates(&self, coordinates: Coordinates) -> usize {
-        (coordinates.row * self.height + coordinates.column - 1) as usize
+        (coordinates.row * self.height + coordinates.column - 11) as usize
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {
         let width = self.cells.len() as u16 / self.height;
         Coordinates {
-            row: index / width,
-            column: index % width,
+            row: index / width + 1,
+            column: index % width + 1,
         }
     }
 

@@ -20,6 +20,7 @@ impl Game {
         }
     }
 
+    /// Open the cell and return whether it contains a bomb or not
     pub fn open_cell(&mut self, coordinates: Coordinates) -> bool {
         let result = self.field.open_cell(coordinates);
 
