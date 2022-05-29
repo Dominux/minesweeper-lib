@@ -24,15 +24,43 @@ impl Default for Cell {
 }
 
 impl Cell {
-    pub fn open() {
-        unimplemented!()
+    pub fn open(&mut self) {
+        self._is_opened = true
     }
 
     pub fn is_opened(&self) -> bool {
         self._is_opened
     }
 
+    pub fn is_bomb(&self) -> bool {
+        matches!(self._type, CellType::Bomb)
+    }
+
     pub(crate) fn set_type(&mut self, _type: CellType) {
         self._type = _type
+    }
+
+    /// Increment the cell's bombs counter
+    ///
+    /// Panics if it contains a bomb
+    pub(crate) fn increment_bombs_counter(&mut self) {
+        match self._type {
+            CellType::Empty(c) => self.set_type(CellType::Empty(c + 1)),
+            CellType::Bomb => panic!("the cell contains a bomb"),
+        }
+    }
+}
+
+pub struct Coordinates {
+    pub row: u16,
+    pub column: u16,
+}
+
+impl Clone for Coordinates {
+    fn clone(&self) -> Self {
+        Self {
+            row: self.row,
+            column: self.column,
+        }
     }
 }
