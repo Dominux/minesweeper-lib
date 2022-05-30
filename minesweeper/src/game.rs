@@ -4,19 +4,19 @@ use crate::{
     random_chooser::RandomChooser,
 };
 
-pub struct Game {
-    field: Field,
+pub struct Game<'a> {
+    pub(crate) field: Field,
     is_started: bool,
     pub bombs_amount: usize,
-    pub random_chooser: &'static dyn RandomChooser,
+    pub random_chooser: &'a dyn RandomChooser,
 }
 
-impl Game {
+impl<'a> Game<'a> {
     pub fn new(
         height: u16,
         width: u16,
         bombs_amount: usize,
-        random_chooser: &'static dyn RandomChooser,
+        random_chooser: &'a dyn RandomChooser,
     ) -> Self {
         Self {
             field: Field::new(height, width),

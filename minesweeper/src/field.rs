@@ -1,8 +1,9 @@
 use crate::cell::{Cell, CellType, Coordinates};
 
 /// Main structure to play on
+#[derive(Debug)]
 pub(crate) struct Field {
-    cells: Vec<Cell>,
+    pub(crate) cells: Vec<Cell>,
     pub(crate) height: u16,
 }
 
@@ -23,12 +24,12 @@ impl Field {
 
     fn get_cell_index_from_coordinates(&self, coordinates: Coordinates) -> usize {
         let x = (coordinates.row * self.height + coordinates.column - 11) as usize;
-		
-		if x >= 100 {
-			println!("kek: {:#?}", coordinates)
-		}
 
-		x
+        if x >= 100 {
+            println!("kek: {:#?}", coordinates)
+        }
+
+        x
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {
