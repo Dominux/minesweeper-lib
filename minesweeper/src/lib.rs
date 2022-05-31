@@ -3,6 +3,7 @@
 use crate::random_chooser::RandRandomChooser;
 
 mod cell;
+mod errors;
 mod field;
 mod game;
 mod random_chooser;
@@ -32,11 +33,14 @@ impl<'a> Minesweeper<'a> {
 
     /// Open cell and get "None" if game has not ended or "Some" if it has
     /// "Some" contains the game result
-    pub fn open_cell(&mut self, coordinates: &cell::Coordinates) -> Option<&game::GameResult> {
-        let result = self.game.open_cell(coordinates);
+    pub fn open_cell(
+        &mut self,
+        coordinates: &cell::Coordinates,
+    ) -> errors::MinesweeperResult<Option<&game::GameResult>> {
+        let result = self.game.open_cell(coordinates)?;
         if !result {
-            return None;
+            return Ok(None);
         }
-        Some(self.game.get_result())
+        Ok(Some(self.game.get_result()))
     }
 }

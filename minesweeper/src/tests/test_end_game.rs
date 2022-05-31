@@ -37,14 +37,14 @@ fn test_win_game() {
     for i in no_bomb_cells {
         println!("{i}");
         let coordinates = game.field.get_cell_coordinates_from_index(i as u16);
-        let open_result = game.open_cell(&coordinates);
+        let open_result = game.open_cell(&coordinates).expect("lel");
         assert!(!open_result);
         assert!(game.is_started());
     }
 
     // Opening the last cell
     let coordinates = game.field.get_cell_coordinates_from_index(last_cell as u16);
-    let open_result = game.open_cell(&coordinates);
+    let open_result = game.open_cell(&coordinates).expect("lel");
     assert!(open_result);
     assert!(game.is_ended());
     assert!(matches!(game.get_result(), GameResult::Victory))
@@ -77,11 +77,11 @@ fn test_lose_game() {
 
     // Open first cell and stard the game
     let coordinates = Coordinates { column: 3, row: 2 };
-    game.open_cell(&coordinates);
+    game.open_cell(&coordinates).expect("lol");
 
     // Opening the last cell
     let coordinates = Coordinates { column: 2, row: 4 };
-    let open_result = game.open_cell(&coordinates);
+    let open_result = game.open_cell(&coordinates).expect("lel");
     assert!(open_result);
     assert!(game.is_ended());
     assert!(matches!(game.get_result(), GameResult::Defeat))

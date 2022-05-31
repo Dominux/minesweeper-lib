@@ -1,5 +1,6 @@
 use crate::{
     cell::{CellType, Coordinates},
+    errors::{MinesweeperError, MinesweeperResult},
     field::Field,
     random_chooser::RandomChooser,
 };
@@ -27,9 +28,9 @@ impl<'a> Game<'a> {
     }
 
     /// Open the cell and return whether the game has ended or not
-    pub fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
+    pub fn open_cell(&mut self, coordinates: &Coordinates) -> MinesweeperResult<bool> {
         if self.is_ended() {
-            panic!("The game is ended")
+            return Err(MinesweeperError::OpeningCellsNotAllowedAfterGameEnd);
         }
 
         // If not started yet, then starting it and doing all the needed stuff
@@ -37,14 +38,14 @@ impl<'a> Game<'a> {
             self.field.open_cell(coordinates);
             self.start();
             self.field.cascadian_open(coordinates, true);
-            return false;
+            return Ok(false);
         }
 
         let result = self.field.cascadian_open(coordinates, false);
 
         if result {
             self.end(GameResult::Defeat);
-            return true;
+            return Ok(true);
         }
 
         // If all no-bomb cells are opened - the game is won
@@ -56,10 +57,10 @@ impl<'a> Game<'a> {
             .all(|c| c.is_opened())
         {
             self.end(GameResult::Victory);
-            return true;
+            return Ok(true);
         }
 
-        false
+        Ok(false)
     }
 
     fn fill_with_bombs(&mut self) {

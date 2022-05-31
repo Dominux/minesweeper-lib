@@ -27,7 +27,7 @@ fn test_cascadian_open() {
     assert!(!game.is_started());
 
     let coordinates = Coordinates { column: 5, row: 2 };
-    let first_open_result = game.open_cell(&coordinates);
+    let first_open_result = game.open_cell(&coordinates).expect("kek");
     assert!(!first_open_result);
     assert!(game.is_started());
 
