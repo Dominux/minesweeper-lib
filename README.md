@@ -7,6 +7,7 @@ Minesweeper neural network solver
 ### Testing the minesweeper logic itself:
 
 Dependencies: [cargo](https://doc.rust-lang.org/cargo/)
+
 Write in terminal:
 
 ```sh
