@@ -22,13 +22,6 @@ impl Field {
         cell.is_bomb()
     }
 
-    /// Check if cell is opened
-    pub(crate) fn is_cell_opened(&mut self, coordinates: &Coordinates) -> bool {
-        let i = self.get_cell_index_from_coordinates(coordinates);
-        let cell = &mut self.cells[i];
-        cell.is_opened()
-    }
-
     fn get_cell_index_from_coordinates(&self, coordinates: &Coordinates) -> usize {
         (coordinates.row * self.height + coordinates.column - 11) as usize
     }
@@ -130,5 +123,39 @@ impl Field {
         }
 
         result
+    }
+
+    pub(crate) fn cascadian_open(&mut self, coordinates: &Coordinates, open_anyway: bool) -> bool {
+        let cell = self.get_cell_by_coordinates(coordinates);
+
+        // 0. Not open cell if it is already opened
+        if !open_anyway && cell.is_opened() {
+            return false;
+        }
+
+        // 1. Openning cell
+        cell.open();
+        if cell.is_bomb() {
+            return true;
+        }
+
+        // 2. If the cell has a bomb as a neighbor - pass
+        if let CellType::Empty(n) = cell._type {
+            if n != 0 {
+                return false;
+            }
+        }
+
+        // 3. Getting it's neighbors
+        let neighbors = self.get_cells_neighbors(coordinates);
+
+        for neighbor in neighbors.flatten() {
+            match neighbor {
+                None => continue,
+                Some(c) => self.cascadian_open(c, false),
+            };
+        }
+
+        false
     }
 }

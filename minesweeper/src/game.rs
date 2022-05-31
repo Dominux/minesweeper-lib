@@ -2,6 +2,7 @@ use crate::{
     cell::{CellType, Coordinates},
     field::Field,
     random_chooser::RandomChooser,
+    view::TerminalViewer,
 };
 
 pub struct Game<'a> {
@@ -28,48 +29,25 @@ impl<'a> Game<'a> {
 
     /// Open the cell and return whether it contains a bomb or not
     pub fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
-        let result = self.cascadian_open(coordinates);
+        // If not started yet, then starting it and doing all the needed stuff
+        if !self.is_started() {
+            self.field.open_cell(coordinates);
+            self.start();
+            self.field.cascadian_open(coordinates, true);
+            return false;
+        }
+
+        let result = self.field.cascadian_open(coordinates, false);
 
         if result {
             self.end(GameResult::Defeat);
             return result;
         }
 
-        // If not started yet, then starting it and doing all the needed stuff
-        if !self.is_started() {
-            self.start();
-        }
-
         false
     }
 
     /// Recursive cascadian openning cells
-    fn cascadian_open(&mut self, coordinates: &Coordinates) -> bool {
-        // 0. Not open cell if it is already opened
-        if self.field.is_cell_opened(coordinates) {
-            return false;
-        }
-
-        // 1. Openning cell
-        let result = self.field.open_cell(coordinates);
-
-        if result {
-            return result;
-        }
-
-        // 2. Getting it's neighbors
-        let neighbors = self.field.get_cells_neighbors(coordinates);
-
-        for neighbor in neighbors.flatten() {
-            match neighbor {
-                None => continue,
-                Some(c) => self.cascadian_open(c),
-            };
-        }
-
-        false
-    }
-
     fn fill_with_bombs(&mut self) {
         let choosen_cells_indexes = {
             let closed_cells_indexes = self.field.get_closed_cells_indexes();

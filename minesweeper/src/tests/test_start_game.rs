@@ -47,7 +47,7 @@ fn test_bombs_neighbors() {
     assert!(!first_open_result);
     assert!(game.is_started());
 
-    let view = TerminalViewer::view(game.field);
+    let view = TerminalViewer::view(&game.field);
     println!("{view}");
     assert_eq!(view, expected_field);
 }
