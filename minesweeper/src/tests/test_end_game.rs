@@ -45,7 +45,7 @@ fn test_win_game() {
     // Opening the last cell
     let coordinates = game.field.get_cell_coordinates_from_index(last_cell as u16);
     let open_result = game.open_cell(&coordinates);
-    assert!(!open_result);
+    assert!(open_result);
     assert!(game.is_ended());
     assert!(matches!(game.get_result(), GameResult::Victory))
 }

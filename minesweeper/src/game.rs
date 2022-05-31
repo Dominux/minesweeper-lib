@@ -26,7 +26,7 @@ impl<'a> Game<'a> {
         }
     }
 
-    /// Open the cell and return whether it contains a bomb or not
+    /// Open the cell and return whether the game has ended or not
     pub fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
         if self.is_ended() {
             panic!("The game is ended")
@@ -44,7 +44,7 @@ impl<'a> Game<'a> {
 
         if result {
             self.end(GameResult::Defeat);
-            return result;
+            return true;
         }
 
         // If all no-bomb cells are opened - the game is won
@@ -56,6 +56,7 @@ impl<'a> Game<'a> {
             .all(|c| c.is_opened())
         {
             self.end(GameResult::Victory);
+            return true;
         }
 
         false

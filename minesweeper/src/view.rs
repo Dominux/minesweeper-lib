@@ -1,9 +1,9 @@
-#![allow(dead_code)]
 use crate::{cell::CellType, field::Field};
 
 pub struct TerminalViewer;
 
 impl TerminalViewer {
+    #[allow(dead_code)]
     pub(crate) fn view(field: &Field) -> String {
         let width = field.cells.len() / field.height as usize;
         field
