@@ -1,15 +1,19 @@
-use crate::tests::factories::not_random_chooser::NotRandomChooser;
-use crate::view::TerminalViewer;
-use crate::{cell::Coordinates, game::Game, random_chooser::RandRandomChooser};
+use crate::{
+    cell::Coordinates, game::Game, random_chooser::RandRandomChooser,
+    tests::factories::not_random_chooser::NotRandomChooser, view::TerminalViewer,
+};
 
 static RANDOM_CHOOSER: RandRandomChooser = RandRandomChooser {};
 
 #[test]
 fn test_start_game() {
-    let mut game = Game::new(10, 10, 10, &RANDOM_CHOOSER);
-    let coordinates = Coordinates { column: 3, row: 2 };
-    let first_open_result = game.open_cell(coordinates);
-    assert!(!first_open_result)
+    // Running test a hundred times
+    for _ in 0..100 {
+        let mut game = Game::new(10, 10, 10, &RANDOM_CHOOSER);
+        let coordinates = Coordinates { column: 3, row: 2 };
+        let first_open_result = game.open_cell(coordinates);
+        assert!(!first_open_result)
+    }
 }
 
 #[test]

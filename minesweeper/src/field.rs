@@ -61,7 +61,7 @@ impl Field {
     ) -> [[Option<Coordinates>; 3]; 3] {
         let is_with_top = coordinates.row != 1;
         let is_with_left = coordinates.column != 1;
-        let is_with_right = coordinates.column != (self.cells.len() as u16);
+        let is_with_right = coordinates.column != (self.cells.len() as u16) / self.height;
         let is_with_bottom = coordinates.row != self.height;
 
         // Allocating desired result with nones
