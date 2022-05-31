@@ -1,5 +1,7 @@
 #![feature(slice_flatten)]
 
+pub use crate::errors::MinesweeperError;
+pub use crate::game::GameResult;
 use crate::random_chooser::RandRandomChooser;
 
 mod cell;
@@ -13,16 +15,15 @@ mod view;
 mod tests;
 
 /// The game itself
-pub struct Minesweeper<'a> {
-    game: game::Game<'a>,
+pub struct Minesweeper {
+    game: game::Game,
 }
 
-static RANDOM_CHOOSER: RandRandomChooser = RandRandomChooser {};
-
-impl<'a> Minesweeper<'a> {
+impl Minesweeper {
     /// Create new game
     pub fn new(height: u16, width: u16, bombs_amount: usize) -> Self {
-        let game = game::Game::new(height, width, bombs_amount, &RANDOM_CHOOSER);
+        let random_chooser = RandRandomChooser {};
+        let game = game::Game::new(height, width, bombs_amount, Box::new(random_chooser));
         Self { game }
     }
 
@@ -35,9 +36,12 @@ impl<'a> Minesweeper<'a> {
     /// "Some" contains the game result
     pub fn open_cell(
         &mut self,
-        coordinates: &cell::Coordinates,
-    ) -> errors::MinesweeperResult<Option<&game::GameResult>> {
-        let result = self.game.open_cell(coordinates)?;
+        column: u16,
+        row: u16,
+    ) -> errors::MinesweeperResult<Option<&GameResult>> {
+        let coordinates = cell::Coordinates { column, row };
+
+        let result = self.game.open_cell(&coordinates)?;
         if !result {
             return Ok(None);
         }

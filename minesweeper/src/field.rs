@@ -1,4 +1,7 @@
-use crate::cell::{Cell, CellType, Coordinates};
+use crate::{
+    cell::{Cell, CellType, Coordinates},
+    errors::{MinesweeperError, MinesweeperResult},
+};
 
 /// Main structure to play on
 #[derive(Debug)]
@@ -15,11 +18,10 @@ impl Field {
     }
 
     /// Open the cell and return whether it contains a bomb or not
-    pub(crate) fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
-        let i = self.get_cell_index_from_coordinates(coordinates);
-        let cell = &mut self.cells[i];
+    pub(crate) fn open_cell(&mut self, coordinates: &Coordinates) -> MinesweeperResult<bool> {
+        let cell = self.get_cell_by_coordinates(coordinates)?;
         cell.open();
-        cell.is_bomb()
+        Ok(cell.is_bomb())
     }
 
     fn get_cell_index_from_coordinates(&self, coordinates: &Coordinates) -> usize {
@@ -34,9 +36,17 @@ impl Field {
         }
     }
 
-    pub(crate) fn get_cell_by_coordinates(&mut self, coordinates: &Coordinates) -> &mut Cell {
+    pub(crate) fn get_cell_by_coordinates(
+        &mut self,
+        coordinates: &Coordinates,
+    ) -> MinesweeperResult<&mut Cell> {
         let i = self.get_cell_index_from_coordinates(coordinates);
-        &mut self.cells[i]
+        self.cells
+            .get_mut(i)
+            .ok_or(MinesweeperError::WrongCoordinates {
+                column: coordinates.column,
+                row: coordinates.row,
+            })
     }
 
     pub(crate) fn set_celltype_by_index(&mut self, index: usize, _type: CellType) {
@@ -126,24 +136,28 @@ impl Field {
     }
 
     /// Recursive cascadian openning cells
-    pub(crate) fn cascadian_open(&mut self, coordinates: &Coordinates, open_anyway: bool) -> bool {
-        let cell = self.get_cell_by_coordinates(coordinates);
+    pub(crate) fn cascadian_open(
+        &mut self,
+        coordinates: &Coordinates,
+        open_anyway: bool,
+    ) -> MinesweeperResult<bool> {
+        let cell = self.get_cell_by_coordinates(coordinates)?;
 
         // 0. Not open cell if it is already opened
         if !open_anyway && cell.is_opened() {
-            return false;
+            return Ok(false);
         }
 
         // 1. Openning cell
         cell.open();
         if cell.is_bomb() {
-            return true;
+            return Ok(true);
         }
 
         // 2. If the cell has a bomb as a neighbor - pass
         if let CellType::Empty(n) = cell._type {
             if n != 0 {
-                return false;
+                return Ok(false);
             }
         }
 
@@ -153,10 +167,10 @@ impl Field {
         for neighbor in neighbors.flatten() {
             match neighbor {
                 None => continue,
-                Some(c) => self.cascadian_open(c, false),
+                Some(c) => self.cascadian_open(c, false)?,
             };
         }
 
-        false
+        Ok(false)
     }
 }

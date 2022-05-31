@@ -3,13 +3,12 @@ use crate::{
     tests::factories::not_random_chooser::NotRandomChooser, view::TerminalViewer,
 };
 
-static RANDOM_CHOOSER: RandRandomChooser = RandRandomChooser {};
-
 #[test]
 fn test_start_game() {
     // Running test a hundred times
     for _ in 0..100 {
-        let mut game = Game::new(10, 10, 10, &RANDOM_CHOOSER);
+        let random_chooser = RandRandomChooser {};
+        let mut game = Game::new(10, 10, 10, Box::new(random_chooser));
         assert!(!game.is_started());
 
         let coordinates = Coordinates { column: 3, row: 2 };
@@ -39,7 +38,7 @@ fn test_bombs_neighbors() {
     let choosen_result = vec![11, 17, 31, 51, 56, 60, 67, 74, 84, 86];
     let random_chooser = NotRandomChooser::new(choosen_result);
 
-    let mut game = Game::new(10, 10, 10, &random_chooser);
+    let mut game = Game::new(10, 10, 10, Box::new(random_chooser));
     assert!(!game.is_started());
 
     let coordinates = Coordinates { column: 5, row: 2 };

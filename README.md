@@ -11,5 +11,5 @@ Dependencies: [cargo](https://doc.rust-lang.org/cargo/)
 Write in terminal:
 
 ```sh
-$ make test
+$ make test_logic
 ```

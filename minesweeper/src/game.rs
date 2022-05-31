@@ -5,19 +5,19 @@ use crate::{
     random_chooser::RandomChooser,
 };
 
-pub struct Game<'a> {
+pub struct Game {
     pub(crate) field: Field,
     pub bombs_amount: usize,
-    pub random_chooser: &'a dyn RandomChooser,
+    pub random_chooser: Box<dyn RandomChooser>,
     state: GameState,
 }
 
-impl<'a> Game<'a> {
+impl Game {
     pub fn new(
         height: u16,
         width: u16,
         bombs_amount: usize,
-        random_chooser: &'a dyn RandomChooser,
+        random_chooser: Box<dyn RandomChooser>,
     ) -> Self {
         Self {
             field: Field::new(height, width),
@@ -35,13 +35,13 @@ impl<'a> Game<'a> {
 
         // If not started yet, then starting it and doing all the needed stuff
         if !self.is_started() {
-            self.field.open_cell(coordinates);
-            self.start();
-            self.field.cascadian_open(coordinates, true);
+            self.field.open_cell(coordinates)?;
+            self.start()?;
+            self.field.cascadian_open(coordinates, true)?;
             return Ok(false);
         }
 
-        let result = self.field.cascadian_open(coordinates, false);
+        let result = self.field.cascadian_open(coordinates, false)?;
 
         if result {
             self.end(GameResult::Defeat);
@@ -63,7 +63,7 @@ impl<'a> Game<'a> {
         Ok(false)
     }
 
-    fn fill_with_bombs(&mut self) {
+    fn fill_with_bombs(&mut self) -> MinesweeperResult<()> {
         let choosen_cells_indexes = {
             let closed_cells_indexes = self.field.get_closed_cells_indexes();
 
@@ -84,13 +84,15 @@ impl<'a> Game<'a> {
                 .filter_map(|c| c);
 
             for neighbor in neighbors_coordinates {
-                let cell = self.field.get_cell_by_coordinates(&neighbor);
+                let cell = self.field.get_cell_by_coordinates(&neighbor)?;
 
                 if !cell.is_bomb() {
                     cell.increment_bombs_counter()
                 }
             }
         }
+
+        Ok(())
     }
 
     //////////////////////////////////////////////////////////////
@@ -101,10 +103,11 @@ impl<'a> Game<'a> {
         !matches!(self.state, GameState::NotStarted)
     }
 
-    fn start(&mut self) {
+    fn start(&mut self) -> MinesweeperResult<()> {
         // Fill the field with bombs and according numbers in neighbors cells
-        self.fill_with_bombs();
-        self.state = GameState::Started
+        self.fill_with_bombs()?;
+        self.state = GameState::Started;
+        Ok(())
     }
 
     pub fn is_ended(&self) -> bool {
@@ -123,6 +126,7 @@ impl<'a> Game<'a> {
     }
 }
 
+#[derive(Debug)]
 pub enum GameResult {
     Victory,
     Defeat,
