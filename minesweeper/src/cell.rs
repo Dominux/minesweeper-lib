@@ -53,17 +53,8 @@ impl Cell {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Coordinates {
     pub row: u16,
     pub column: u16,
-}
-
-impl Clone for Coordinates {
-    fn clone(&self) -> Self {
-        Self {
-            row: self.row,
-            column: self.column,
-        }
-    }
 }

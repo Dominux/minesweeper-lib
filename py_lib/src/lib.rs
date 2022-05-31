@@ -10,6 +10,21 @@ struct Minesweeper {
     game: minesweeper_lib::Minesweeper,
 }
 
+#[pyclass]
+enum GameResult {
+    Victory,
+    Defeat,
+}
+
+impl From<&minesweeper_lib::GameResult> for GameResult {
+    fn from(r: &minesweeper_lib::GameResult) -> Self {
+        match r {
+            minesweeper_lib::GameResult::Victory => GameResult::Victory,
+            minesweeper_lib::GameResult::Defeat => GameResult::Defeat,
+        }
+    }
+}
+
 #[pymethods]
 impl Minesweeper {
     #[new]
@@ -23,14 +38,16 @@ impl Minesweeper {
         Ok(self.game.view())
     }
 
-    fn open_cell(
-        &mut self,
-        column: u16,
-        row: u16,
-    ) -> PyResult<Option<&minesweeper_lib::GameResult>> {
+    fn open_cell(&mut self, column: u16, row: u16) -> PyResult<Option<GameResult>> {
         let result = self.game.open_cell(column, row);
+
         if result.is_ok() {
-            return Ok(result.unwrap());
+            let result = result.unwrap();
+            if let None = result {
+                return Ok(None);
+            }
+
+            return Ok(Some(result.unwrap().into()));
         }
 
         let error = result.unwrap_err();
@@ -47,7 +64,8 @@ impl Minesweeper {
 
 /// Minesweeper lib
 #[pymodule]
-fn minesweeper(py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn minesweeper(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<Minesweeper>()?;
+    m.add_class::<GameResult>()?;
     Ok(())
 }
