@@ -10,9 +10,12 @@ fn test_start_game() {
     // Running test a hundred times
     for _ in 0..100 {
         let mut game = Game::new(10, 10, 10, &RANDOM_CHOOSER);
+        assert!(!game.is_started());
+
         let coordinates = Coordinates { column: 3, row: 2 };
         let first_open_result = game.open_cell(coordinates);
-        assert!(!first_open_result)
+        assert!(!first_open_result);
+        assert!(game.is_started())
     }
 }
 
@@ -37,9 +40,12 @@ fn test_bombs_neighbors() {
     let random_chooser = NotRandomChooser::new(choosen_result);
 
     let mut game = Game::new(10, 10, 10, &random_chooser);
+    assert!(!game.is_started());
+
     let coordinates = Coordinates { column: 3, row: 2 };
     let first_open_result = game.open_cell(coordinates);
     assert!(!first_open_result);
+    assert!(game.is_started());
 
     let view = TerminalViewer::view(game.field);
     println!("{view}");

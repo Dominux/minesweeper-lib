@@ -6,9 +6,9 @@ use crate::{
 
 pub struct Game<'a> {
     pub(crate) field: Field,
-    is_started: bool,
     pub bombs_amount: usize,
     pub random_chooser: &'a dyn RandomChooser,
+    state: GameState,
 }
 
 impl<'a> Game<'a> {
@@ -20,9 +20,9 @@ impl<'a> Game<'a> {
     ) -> Self {
         Self {
             field: Field::new(height, width),
-            is_started: false,
             bombs_amount,
             random_chooser,
+            state: GameState::NotStarted,
         }
     }
 
@@ -31,17 +31,11 @@ impl<'a> Game<'a> {
         let result = self.field.open_cell(coordinates);
 
         // If not started yet, then starting it and doing all the needed stuff
-        if !self.is_started {
-            self.on_start();
-            self.is_started = true
+        if !self.is_started() {
+            self.start();
         }
 
         result
-    }
-
-    /// Fill the field with bombs and according numbers in neighbors cells
-    fn on_start(&mut self) {
-        self.fill_with_bombs();
     }
 
     fn fill_with_bombs(&mut self) {
@@ -73,4 +67,44 @@ impl<'a> Game<'a> {
             }
         }
     }
+
+    //////////////////////////////////////////////////////////////
+    //  State features
+    //////////////////////////////////////////////////////////////
+
+    pub fn is_started(&self) -> bool {
+        !matches!(self.state, GameState::NotStarted)
+    }
+
+    fn start(&mut self) {
+        // Fill the field with bombs and according numbers in neighbors cells
+        self.fill_with_bombs();
+        self.state = GameState::Started
+    }
+
+    pub fn is_ended(&self) -> bool {
+        matches!(self.state, GameState::Ended(_))
+    }
+
+    fn end(&mut self, result: GameResult) {
+        self.state = GameState::Ended(result)
+    }
+
+    fn get_result(&self) -> &GameResult {
+        match &self.state {
+            GameState::Ended(r) => r,
+            _ => panic!("Game isn't ended yet"),
+        }
+    }
+}
+
+pub enum GameResult {
+    Victory,
+    Defeat,
+}
+
+enum GameState {
+    NotStarted,
+    Started,
+    Ended(GameResult),
 }
