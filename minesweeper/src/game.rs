@@ -61,7 +61,6 @@ impl<'a> Game<'a> {
         false
     }
 
-    /// Recursive cascadian openning cells
     fn fill_with_bombs(&mut self) {
         let choosen_cells_indexes = {
             let closed_cells_indexes = self.field.get_closed_cells_indexes();

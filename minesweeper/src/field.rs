@@ -125,6 +125,7 @@ impl Field {
         result
     }
 
+    /// Recursive cascadian openning cells
     pub(crate) fn cascadian_open(&mut self, coordinates: &Coordinates, open_anyway: bool) -> bool {
         let cell = self.get_cell_by_coordinates(coordinates);
 
