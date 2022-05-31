@@ -2,7 +2,6 @@ use crate::{
     cell::{CellType, Coordinates},
     field::Field,
     random_chooser::RandomChooser,
-    view::TerminalViewer,
 };
 
 pub struct Game<'a> {
@@ -29,6 +28,10 @@ impl<'a> Game<'a> {
 
     /// Open the cell and return whether it contains a bomb or not
     pub fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
+        if self.is_ended() {
+            panic!("The game is ended")
+        }
+
         // If not started yet, then starting it and doing all the needed stuff
         if !self.is_started() {
             self.field.open_cell(coordinates);
@@ -42,6 +45,17 @@ impl<'a> Game<'a> {
         if result {
             self.end(GameResult::Defeat);
             return result;
+        }
+
+        // If all no-bomb cells are opened - the game is won
+        if self
+            .field
+            .cells
+            .iter()
+            .filter(|c| !c.is_bomb())
+            .all(|c| c.is_opened())
+        {
+            self.end(GameResult::Victory);
         }
 
         false
@@ -100,7 +114,7 @@ impl<'a> Game<'a> {
         self.state = GameState::Ended(result)
     }
 
-    fn get_result(&self) -> &GameResult {
+    pub fn get_result(&self) -> &GameResult {
         match &self.state {
             GameState::Ended(r) => r,
             _ => panic!("Game isn't ended yet"),
