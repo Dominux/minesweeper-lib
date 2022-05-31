@@ -27,15 +27,47 @@ impl<'a> Game<'a> {
     }
 
     /// Open the cell and return whether it contains a bomb or not
-    pub fn open_cell(&mut self, coordinates: Coordinates) -> bool {
-        let result = self.field.open_cell(coordinates);
+    pub fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
+        let result = self.cascadian_open(coordinates);
+
+        if result {
+            self.end(GameResult::Defeat);
+            return result;
+        }
 
         // If not started yet, then starting it and doing all the needed stuff
         if !self.is_started() {
             self.start();
         }
 
-        result
+        false
+    }
+
+    /// Recursive cascadian openning cells
+    fn cascadian_open(&mut self, coordinates: &Coordinates) -> bool {
+        // 0. Not open cell if it is already opened
+        if self.field.is_cell_opened(coordinates) {
+            return false;
+        }
+
+        // 1. Openning cell
+        let result = self.field.open_cell(coordinates);
+
+        if result {
+            return result;
+        }
+
+        // 2. Getting it's neighbors
+        let neighbors = self.field.get_cells_neighbors(coordinates);
+
+        for neighbor in neighbors.flatten() {
+            match neighbor {
+                None => continue,
+                Some(c) => self.cascadian_open(c),
+            };
+        }
+
+        false
     }
 
     fn fill_with_bombs(&mut self) {
@@ -53,13 +85,13 @@ impl<'a> Game<'a> {
             // Incrementing it's empty neighbors bombs counter
             let neighbors_coordinates = self
                 .field
-                .get_cells_neighbors(self.field.get_cell_coordinates_from_index(i as u16))
+                .get_cells_neighbors(&self.field.get_cell_coordinates_from_index(i as u16))
                 .into_iter()
                 .flatten()
                 .filter_map(|c| c);
 
             for neighbor in neighbors_coordinates {
-                let cell = self.field.get_cell_by_coordinates(neighbor);
+                let cell = self.field.get_cell_by_coordinates(&neighbor);
 
                 if !cell.is_bomb() {
                     cell.increment_bombs_counter()

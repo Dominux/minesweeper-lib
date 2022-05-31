@@ -15,21 +15,22 @@ impl Field {
     }
 
     /// Open the cell and return whether it contains a bomb or not
-    pub(crate) fn open_cell(&mut self, coordinates: Coordinates) -> bool {
+    pub(crate) fn open_cell(&mut self, coordinates: &Coordinates) -> bool {
         let i = self.get_cell_index_from_coordinates(coordinates);
         let cell = &mut self.cells[i];
         cell.open();
         cell.is_bomb()
     }
 
-    fn get_cell_index_from_coordinates(&self, coordinates: Coordinates) -> usize {
-        let x = (coordinates.row * self.height + coordinates.column - 11) as usize;
+    /// Check if cell is opened
+    pub(crate) fn is_cell_opened(&mut self, coordinates: &Coordinates) -> bool {
+        let i = self.get_cell_index_from_coordinates(coordinates);
+        let cell = &mut self.cells[i];
+        cell.is_opened()
+    }
 
-        if x >= 100 {
-            println!("kek: {:#?}", coordinates)
-        }
-
-        x
+    fn get_cell_index_from_coordinates(&self, coordinates: &Coordinates) -> usize {
+        (coordinates.row * self.height + coordinates.column - 11) as usize
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {
@@ -40,7 +41,7 @@ impl Field {
         }
     }
 
-    pub(crate) fn get_cell_by_coordinates(&mut self, coordinates: Coordinates) -> &mut Cell {
+    pub(crate) fn get_cell_by_coordinates(&mut self, coordinates: &Coordinates) -> &mut Cell {
         let i = self.get_cell_index_from_coordinates(coordinates);
         &mut self.cells[i]
     }
@@ -57,7 +58,7 @@ impl Field {
 
     pub(crate) fn get_cells_neighbors(
         &mut self,
-        coordinates: Coordinates,
+        coordinates: &Coordinates,
     ) -> [[Option<Coordinates>; 3]; 3] {
         let is_with_top = coordinates.row != 1;
         let is_with_left = coordinates.column != 1;
