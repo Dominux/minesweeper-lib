@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use crate::{cell::CellType, field::Field};
 
 pub struct TerminalViewer;

@@ -11,7 +11,7 @@ impl NotRandomChooser {
 }
 
 impl RandomChooser for NotRandomChooser {
-    fn choose_multiple(&self, _vec: Vec<usize>, amount: usize) -> Vec<usize> {
+    fn choose_multiple(&self, _vec: Vec<usize>, _amount: usize) -> Vec<usize> {
         self.choosen_result.clone()
     }
 }
