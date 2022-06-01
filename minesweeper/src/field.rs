@@ -39,7 +39,7 @@ impl Field {
             });
         }
 
-        Ok((coordinates.row * self.height + coordinates.column - 11) as usize)
+        Ok((coordinates.row * self.height + coordinates.column - (self.height + 1)) as usize)
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {

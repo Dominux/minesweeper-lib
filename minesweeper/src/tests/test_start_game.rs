@@ -8,7 +8,7 @@ fn test_start_game() {
     // Running test a hundred times
     for _ in 0..100 {
         let random_chooser = RandRandomChooser {};
-        let mut game = Game::new(10, 10, 10, Box::new(random_chooser));
+        let mut game = Game::new(20, 20, 20, Box::new(random_chooser));
         assert!(!game.is_started());
 
         let coordinates = Coordinates { column: 3, row: 2 };
