@@ -5,10 +5,9 @@ pub struct TerminalViewer;
 impl TerminalViewer {
     #[allow(dead_code)]
     pub(crate) fn view(field: &Field) -> String {
-        let width = field.cells.len() / field.height as usize;
         field
             .cells
-            .chunks(width)
+            .chunks(field.get_width() as usize)
             .map(|row| {
                 row.iter()
                     .map(|c| match c._type {
@@ -23,10 +22,9 @@ impl TerminalViewer {
     }
 
     pub(crate) fn view_only_opened(field: &Field) -> String {
-        let width = field.cells.len() / field.height as usize;
         field
             .cells
-            .chunks(width)
+            .chunks(field.get_width() as usize)
             .map(|row| {
                 row.iter()
                     .map(|c| {

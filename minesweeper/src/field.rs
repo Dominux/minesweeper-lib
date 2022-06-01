@@ -24,7 +24,7 @@ impl Field {
         Ok(cell.is_bomb())
     }
 
-    fn get_width(&self) -> u16 {
+    pub(crate) fn get_width(&self) -> u16 {
         self.cells.len() as u16 / self.height
     }
 
@@ -32,14 +32,19 @@ impl Field {
         &self,
         coordinates: &Coordinates,
     ) -> MinesweeperResult<usize> {
-        if coordinates.column > self.get_width() {
+        let width = self.get_width();
+
+        if coordinates.column > width {
             return Err(MinesweeperError::WrongCoordinates {
                 column: coordinates.column,
                 row: coordinates.row,
             });
         }
 
-        Ok((coordinates.row * self.height + coordinates.column - (self.height + 1)) as usize)
+        let row = (coordinates.row - 1) * width;
+        let column = coordinates.column - 1;
+
+        Ok((row + column) as usize)
     }
 
     pub(crate) fn get_cell_coordinates_from_index(&self, index: u16) -> Coordinates {

@@ -8,13 +8,19 @@ fn test_start_game() {
     // Running test a hundred times
     for _ in 0..100 {
         let random_chooser = RandRandomChooser {};
-        let mut game = Game::new(20, 20, 20, Box::new(random_chooser));
+        let mut game = Game::new(15, 12, 50, Box::new(random_chooser));
         assert!(!game.is_started());
 
-        let coordinates = Coordinates { column: 3, row: 2 };
+        let coordinates = Coordinates { column: 3, row: 1 };
         let first_open_result = game.open_cell(&coordinates).expect("jpw");
         assert!(!first_open_result);
-        assert!(game.is_started())
+        assert!(game.is_started());
+
+        let view = TerminalViewer::view_only_opened(&game.field);
+        println!("{view}");
+
+        let view = TerminalViewer::view(&game.field);
+        println!("{view}");
     }
 }
 

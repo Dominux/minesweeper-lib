@@ -33,7 +33,7 @@ impl Minesweeper {
     }
 
     /// Open cell and get "None" if game has not ended or "Some" if it has
-    /// "Some" contains the game result
+    /// "Some" contained the game result
     pub fn open_cell(
         &mut self,
         column: u16,
