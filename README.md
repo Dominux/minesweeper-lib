@@ -8,7 +8,7 @@ _Minesweeper logic without Runtime stuff to use as a backend with any programmin
 
 It's written on Rust so it doesn't have a runtime, garbage collector and any other stuff that gets program bigger during it's runtime, makes it taking an enormous amount of RAM, forcing CPU to process more memory and spend extra operations/time on working with cleaning memory/reference counting stuff and so on, or even to work with a heavy interpretators like [CPython](https://github.com/python/cpython) and [V8](https://v8.dev/) or with a much heavier platforms like [JVM](https://ru.wikipedia.org/wiki/Java_Virtual_Machine), [.NET/.NET Core](https://dotnet.microsoft.com/en-us/) or [NodeJS](https://nodejs.dev/). Speaking of platforms, they takes a huge peace of a hard disk space also and they are being hard to setup and use especially on no-name operating systems or incompatible hardware.
 
-Moreover, Rust has the best typesystem in the whole humanity and programs written on it have no runtime panics or segmentation faults, like C/C++ ones. Actually, it's possible, but this program should have panics or "unsafe" sections inside it's body. And at this point my program doesn't have them at all (and you can check by trying to, maybe, grep them by "panic" or "unsafe" keywords).
+Moreover, Rust has the best typesystem in the whole humanity and programs written on it have no runtime panics or segmentation faults, like C/C++ ones. Actually, it's possible, but this program should have panics or ["unsafe"](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html) sections inside it's body. And at this point my program doesn't have them at all (and you can check by trying to, maybe, grep them by "panic" or "unsafe" keywords).
 
 <br/>
 
