@@ -1,6 +1,6 @@
 use crate::{
     cell::{Cell, CellType},
-    field::{self, Field},
+    field::Field,
 };
 
 pub(crate) struct SimpleView;

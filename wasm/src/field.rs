@@ -20,8 +20,8 @@ pub fn field_component(props: &Props) -> Html {
                             { for row.iter().map(|cell|
 
                                 html!(
-                                    <td class="cell-td">
-                                        <Cell is_opened={cell.is_opened}/>
+                                    <td>
+                                        <Cell is_opened={cell.is_opened} _type={cell._type.clone()}/>
                                     </td>
                                 )
 

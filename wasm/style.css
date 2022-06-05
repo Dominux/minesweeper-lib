@@ -8,12 +8,6 @@
 	box-sizing: border-box;
 	font-family: "VT323", monospace;
 }
-*::-moz-selection {
-	background: rgba(127, 140, 141, 0.6);
-}
-*::selection {
-	background: rgba(127, 140, 141, 0.6);
-}
 
 html {
 	width: 100%;
@@ -34,9 +28,19 @@ body {
 	border: 1px solid black;
 }
 
-.cell-td {
+.cell {
 	height: var(--cell-side);
 	width: var(--cell-side);
+}
+
+.cell-inner {
+	padding: 25% 0;
+}
+
+.closed {
 	background-color: azure;
-	margin: 8px;
+}
+.closed:hover,
+.closed:active {
+	background-color: gainsboro;
 }
