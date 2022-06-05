@@ -35,7 +35,7 @@ impl Minesweeper {
 
     #[getter]
     fn view(&self) -> PyResult<String> {
-        Ok(self.game.view())
+        Ok(self.game.as_string())
     }
 
     fn open_cell(&mut self, column: u16, row: u16) -> PyResult<Option<GameResult>> {

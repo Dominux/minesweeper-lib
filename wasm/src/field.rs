@@ -1,24 +1,38 @@
 use yew::prelude::*;
 
-pub struct Field;
+use crate::cell::Cell;
+use crate::cell_data::CellData;
 
-pub enum Msg {
-    OpenCell(),
+#[derive(Properties, PartialEq)]
+pub struct Props {
+    pub cells: Vec<Vec<CellData>>,
 }
 
-enum Coordinates {}
+#[function_component(Field)]
+pub fn field_component(props: &Props) -> Html {
+    html! {
+        <div>
+            <table class="board">
+                { for props.cells.iter().map(|row|
 
-impl Component for Field {
-    type Message = Msg;
-    type Properties = ();
+                    html! {
+                        <tr>
+                            { for row.iter().map(|cell|
 
-    fn create(ctx: &Context<Self>) -> Self {
-        Self
-    }
+                                html!(
+                                    <td class="cell-td">
+                                        <Cell is_opened={cell.is_opened}/>
+                                    </td>
+                                )
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
-        html!(
-            <h1>{ "Sup nibba" }</h1>
-        )
+                            )}
+                        </tr>
+                    }
+
+                ) }
+            </table>
+
+            <div class="endscreen"></div>
+        </div>
     }
 }

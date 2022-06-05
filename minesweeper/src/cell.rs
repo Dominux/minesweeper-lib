@@ -3,8 +3,8 @@
 /// It shows whether a cell contains a bomb or not.
 /// Aditionally, in case it's empty, it has info about
 /// how much neighbors cells contain bombs
-#[derive(Debug)]
-pub(crate) enum CellType {
+#[derive(Debug, PartialEq, Clone)]
+pub enum CellType {
     Bomb,
     Empty(u16),
 }

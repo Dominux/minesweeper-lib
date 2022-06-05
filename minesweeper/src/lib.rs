@@ -1,7 +1,10 @@
 #![feature(slice_flatten)]
 
+pub use crate::cell::CellType;
 pub use crate::errors::MinesweeperError;
 pub use crate::game::GameResult;
+pub use crate::view::SimpleViewCell;
+
 use crate::random_chooser::RandRandomChooser;
 
 mod cell;
@@ -28,7 +31,12 @@ impl Minesweeper {
     }
 
     /// View the game field
-    pub fn view(&self) -> String {
+    pub fn view(&self) -> Vec<Vec<SimpleViewCell>> {
+        view::SimpleView::view(&self.game.field)
+    }
+
+    /// View the game field as string
+    pub fn as_string(&self) -> String {
         view::TerminalViewer::view_only_opened(&self.game.field)
     }
 

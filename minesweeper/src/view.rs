@@ -1,5 +1,44 @@
-use crate::{cell::CellType, field::Field};
+use crate::{
+    cell::{Cell, CellType},
+    field::{self, Field},
+};
 
+pub(crate) struct SimpleView;
+
+pub struct SimpleViewCell<'a> {
+    pub _type: Option<&'a CellType>,
+    pub is_opened: bool,
+}
+
+impl<'a> SimpleViewCell<'a> {
+    fn new(cell: &'a Cell) -> Self {
+        if cell.is_opened() {
+            Self {
+                _type: Some(&cell._type),
+                is_opened: true,
+            }
+        } else {
+            Self {
+                _type: None,
+                is_opened: false,
+            }
+        }
+    }
+}
+
+impl SimpleView {
+    pub(crate) fn view(field: &Field) -> Vec<Vec<SimpleViewCell>> {
+        field
+            .cells
+            .chunks(field.get_width() as usize)
+            .map(|row| {
+                row.iter()
+                    .map(|c| SimpleViewCell::new(c))
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>()
+    }
+}
 pub struct TerminalViewer;
 
 impl TerminalViewer {

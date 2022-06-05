@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 yew = "0.19.3"
+
+minesweeper_lib = { path = "../minesweeper" }
+getrandom = { version = "0.2", features = ["js"] }
