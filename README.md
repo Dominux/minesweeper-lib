@@ -68,7 +68,7 @@ If you had no faced any errors then _Minesweeper_ is successfully installed and 
 $ poetry run python
 >>> from minesweeper import Minesweeper
 >>> game = Minesweeper(10, 10, 10)
->>> game.open_cell(6, 3)
+>>> game.open_cell(column=6, row=3)
 >>> print(game.view)
 █ █ █ █ █ █ █ █ █ █
 █ █ █ █ █ █ █ █ █ █
@@ -92,7 +92,7 @@ $ poetry run python
 █ █ █ █ █ █ █ █ █ █
 █ █ █ █ █ █ █ █ █ █
 █ █ █ █ █ █ █ █ █ █
->>> game.open_cell(2, 3)
+>>> game.open_cell(2, row=4)
 >>> print(game.view)
 █ 1 0 0 0 1 █ █ █ █
 1 1 0 0 0 1 █ █ █ █
