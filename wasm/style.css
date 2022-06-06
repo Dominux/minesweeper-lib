@@ -26,6 +26,7 @@ body {
 
 .board {
 	border: 1px solid black;
+	border-radius: 8px;
 }
 
 .cell {
@@ -34,13 +35,18 @@ body {
 }
 
 .cell-inner {
+	text-align: center;
 	padding: 25% 0;
 }
 
 .closed {
-	background-color: azure;
+	background-color: #f0ffff;
 }
 .closed:hover,
 .closed:active {
-	background-color: gainsboro;
+	background-color: #9aedf0;
+}
+
+.opened {
+	background-color: #d8e7e7;
 }

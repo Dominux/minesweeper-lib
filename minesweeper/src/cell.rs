@@ -3,13 +3,13 @@
 /// It shows whether a cell contains a bomb or not.
 /// Aditionally, in case it's empty, it has info about
 /// how much neighbors cells contain bombs
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CellType {
     Bomb,
     Empty(u16),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Cell {
     pub(crate) _type: CellType,
     _is_opened: bool,

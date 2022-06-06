@@ -18,15 +18,16 @@ mod view;
 mod tests;
 
 /// The game itself
+#[derive(Clone, PartialEq)]
 pub struct Minesweeper {
-    game: game::Game,
+    game: game::Game<RandRandomChooser>,
 }
 
 impl Minesweeper {
     /// Create new game
     pub fn new(height: u16, width: u16, bombs_amount: usize) -> Self {
         let random_chooser = RandRandomChooser {};
-        let game = game::Game::new(height, width, bombs_amount, Box::new(random_chooser));
+        let game = game::Game::new(height, width, bombs_amount, random_chooser);
         Self { game }
     }
 

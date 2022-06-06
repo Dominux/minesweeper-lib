@@ -1,5 +1,6 @@
 use crate::random_chooser::RandomChooser;
 
+#[derive(Clone, PartialEq)]
 pub(crate) struct NotRandomChooser {
     choosen_result: Vec<usize>,
 }

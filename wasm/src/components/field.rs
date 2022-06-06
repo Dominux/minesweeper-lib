@@ -1,38 +1,35 @@
 use yew::prelude::*;
 
-use crate::cell::Cell;
-use crate::cell_data::CellData;
+use super::cell::Cell;
+use crate::models;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
-    pub cells: Vec<Vec<CellData>>,
+    pub cells: Vec<Vec<models::CellData>>,
+    pub on_open: Callback<models::Coordinates>,
 }
 
 #[function_component(Field)]
 pub fn field_component(props: &Props) -> Html {
     html! {
-        <div>
+        <>
             <table class="board">
                 { for props.cells.iter().map(|row|
-
                     html! {
                         <tr>
                             { for row.iter().map(|cell|
-
                                 html!(
                                     <td>
-                                        <Cell is_opened={cell.is_opened} _type={cell._type.clone()}/>
+                                        <Cell cell={*cell} on_open={&props.on_open}/>
                                     </td>
                                 )
-
                             )}
                         </tr>
                     }
-
                 ) }
             </table>
 
             <div class="endscreen"></div>
-        </div>
+        </>
     }
 }

@@ -4,7 +4,7 @@ use crate::{
 };
 
 /// Main structure to play on
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Field {
     pub(crate) cells: Vec<Cell>,
     pub(crate) height: u16,

@@ -1,8 +1,6 @@
-mod cell;
-mod cell_data;
-mod field;
-mod game;
+mod components;
+mod models;
 
 fn main() {
-    yew::start_app::<game::Game>();
+    yew::start_app::<components::game::Game>();
 }

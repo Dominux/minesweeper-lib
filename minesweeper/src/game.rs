@@ -5,20 +5,22 @@ use crate::{
     random_chooser::RandomChooser,
 };
 
-pub struct Game {
+#[derive(Clone, PartialEq)]
+pub struct Game<T>
+where
+    T: RandomChooser,
+{
     pub(crate) field: Field,
     pub bombs_amount: usize,
-    pub random_chooser: Box<dyn RandomChooser>,
+    pub random_chooser: T,
     state: GameState,
 }
 
-impl Game {
-    pub fn new(
-        height: u16,
-        width: u16,
-        bombs_amount: usize,
-        random_chooser: Box<dyn RandomChooser>,
-    ) -> Self {
+impl<T> Game<T>
+where
+    T: RandomChooser,
+{
+    pub fn new(height: u16, width: u16, bombs_amount: usize, random_chooser: T) -> Self {
         Self {
             field: Field::new(height, width),
             bombs_amount,
@@ -126,12 +128,13 @@ impl Game {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum GameResult {
     Victory,
     Defeat,
 }
 
+#[derive(Clone, PartialEq)]
 enum GameState {
     NotStarted,
     Started,
