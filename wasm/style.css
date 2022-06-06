@@ -30,13 +30,13 @@ body {
 }
 
 .cell {
+	font-size: 150%;
 	height: var(--cell-side);
 	width: var(--cell-side);
 }
 
 .cell-inner {
 	text-align: center;
-	padding: 25% 0;
 }
 
 .closed {

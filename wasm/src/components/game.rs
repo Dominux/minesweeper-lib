@@ -50,7 +50,7 @@ impl Component for Game {
 impl Game {
     fn get_field(&self) -> Vec<Vec<CellData>> {
         self.game
-            .view()
+            .view(true)
             .iter()
             .enumerate()
             .map(|(ir, r)| {

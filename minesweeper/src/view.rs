@@ -11,15 +11,20 @@ pub struct SimpleViewCell<'a> {
 }
 
 impl<'a> SimpleViewCell<'a> {
-    fn new(cell: &'a Cell) -> Self {
+    fn new(cell: &'a Cell, show_bomb: bool) -> Self {
         if cell.is_opened() {
             Self {
                 _type: Some(&cell._type),
                 is_opened: true,
             }
         } else {
+            let _type = if show_bomb && matches!(cell._type, CellType::Bomb) {
+                Some(&CellType::Bomb)
+            } else {
+                None
+            };
             Self {
-                _type: None,
+                _type,
                 is_opened: false,
             }
         }
@@ -27,13 +32,13 @@ impl<'a> SimpleViewCell<'a> {
 }
 
 impl SimpleView {
-    pub(crate) fn view(field: &Field) -> Vec<Vec<SimpleViewCell>> {
+    pub(crate) fn view(field: &Field, show_bombs: bool) -> Vec<Vec<SimpleViewCell>> {
         field
             .cells
             .chunks(field.get_width() as usize)
             .map(|row| {
                 row.iter()
-                    .map(|c| SimpleViewCell::new(c))
+                    .map(|c| SimpleViewCell::new(c, show_bombs))
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>()

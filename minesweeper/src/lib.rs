@@ -32,8 +32,11 @@ impl Minesweeper {
     }
 
     /// View the game field
-    pub fn view(&self) -> Vec<Vec<SimpleViewCell>> {
-        view::SimpleView::view(&self.game.field)
+    pub fn view(&self, show_all_bombs_after_explosion: bool) -> Vec<Vec<SimpleViewCell>> {
+        view::SimpleView::view(
+            &self.game.field,
+            self.game.is_ended() && show_all_bombs_after_explosion,
+        )
     }
 
     /// View the game field as string
