@@ -2,5 +2,6 @@ mod components;
 mod models;
 
 fn main() {
-    yew::start_app::<components::game::Game>();
+    wasm_logger::init(wasm_logger::Config::default());
+    yew::start_app::<components::settings::Settings>();
 }
