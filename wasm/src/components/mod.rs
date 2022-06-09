@@ -1,4 +1,7 @@
-pub mod cell;
-pub mod field;
-pub mod game;
-pub mod settings;
+mod app;
+mod cell;
+mod field;
+mod game;
+mod settings;
+
+pub use app::App;

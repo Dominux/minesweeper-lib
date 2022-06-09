@@ -50,3 +50,18 @@ body {
 .opened {
 	background-color: #d8e7e7;
 }
+
+form {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	align-items: flex-start;
+	width: 50%;
+}
+
+.error {
+	color: red;
+	font-size: 50%;
+}

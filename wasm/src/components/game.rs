@@ -8,16 +8,28 @@ pub struct Game {
     is_ended: bool,
 }
 
+#[derive(PartialEq, Properties)]
+pub struct Props {
+    pub height: u16,
+    pub width: u16,
+    pub bombs: usize,
+}
+
 pub enum Msg {
     OpenCell(Coordinates),
 }
 
 impl Component for Game {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_ctx: &Context<Self>) -> Self {
-        let game = minesweeper_lib::Minesweeper::new(10, 10, 10);
+    fn create(ctx: &Context<Self>) -> Self {
+        let Props {
+            height,
+            width,
+            bombs,
+        } = &ctx.props();
+        let game = minesweeper_lib::Minesweeper::new(*height, *width, *bombs);
         Self {
             game,
             is_ended: false,

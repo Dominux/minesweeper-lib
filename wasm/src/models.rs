@@ -38,3 +38,20 @@ impl Coordinates {
         }
     }
 }
+
+#[derive(PartialEq, Clone, Copy)]
+pub struct SettingsModel {
+    pub height: u16,
+    pub width: u16,
+    pub bombs: usize,
+}
+
+impl SettingsModel {
+    pub fn new(height: u16, width: u16, bombs: usize) -> Self {
+        Self {
+            height,
+            width,
+            bombs,
+        }
+    }
+}

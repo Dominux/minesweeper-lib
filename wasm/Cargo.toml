@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 yew = "0.19.3"
 web-sys = "0.3.57"
-wasm-logger = "0.2.0"
-log = "0.4.6"
+# wasm-logger = "0.2.0"
+# log = "0.4.6"
 
 minesweeper_lib = { path = "../minesweeper" }
 getrandom = { version = "0.2", features = ["js"] }
